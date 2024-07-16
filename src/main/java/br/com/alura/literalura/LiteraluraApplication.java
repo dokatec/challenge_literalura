@@ -34,6 +34,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		while (option != 0) {
 			menu();
 			option = scanner.nextInt();
+			scanner.nextLine();
 
 			switch (option) {
 				case 1:
@@ -49,11 +50,11 @@ public class LiteraluraApplication implements CommandLineRunner {
 					break;
 
 				case 4:
-					// findAuthorByName(scanner);
+					findAuthorByName(scanner);
 					break;
 
 				case 5:
-					// listAuthorsAliveByYear(scanner);
+					listAuthorsAliveByYear(scanner);
 					break;
 
 				case 0:
@@ -110,6 +111,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 	}
 
 	private void listBooks() {
+
 		List<Book> books = bookRepository.findAll();
 
 		if (books.isEmpty()) {
@@ -138,16 +140,38 @@ public class LiteraluraApplication implements CommandLineRunner {
 		}
 	}
 
-	// private void findAuthorByName(Scanner scanner) {
-	// // TODO Auto-generated method stub
-	// throw new UnsupportedOperationException("Unimplemented method
-	// 'findAuthorByName'");
-	// }
+	private void findAuthorByName(Scanner scanner) {
+		System.out.println("Digite o nome do autor:");
+		String name = scanner.nextLine();
 
-	// private void listAuthorsAliveByYear(Scanner scanner) {
-	// // TODO Auto-generated method stub
-	// throw new UnsupportedOperationException("Unimplemented method
-	// 'listAuthorsAliveByYear'");
-	// }
+		List<Author> authors = bookRepository.findByAuthorsName(name);
+
+		if (authors.isEmpty()) {
+			System.out.println("Nenhum autor encontrado com esse nome");
+		} else {
+			System.out.println("Autores encontrados:");
+			for (Author author : authors) {
+				System.out.println("- " + author.getName());
+			}
+		}
+
+	}
+
+	private void listAuthorsAliveByYear(Scanner scanner) {
+		System.out.println("Digite o ano:");
+		int year = scanner.nextInt();
+		scanner.nextLine();
+
+		List<Author> authors = bookRepository.findByAuthorsBirthYearLessThanEqual(year);
+
+		if (authors.isEmpty()) {
+			System.out.println("Nenhum autor encontrado vivo em " + year);
+		} else {
+			System.out.println("Autores vivos em " + year + ":");
+			for (Author author : authors) {
+				System.out.println("- " + author.getName());
+			}
+		}
+	}
 
 }
